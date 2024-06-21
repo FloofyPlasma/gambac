@@ -3,8 +3,8 @@
   "id": "gambac",
   "version": "${version}",
 
-  "name": "Gambáč",
-  "description": "",
+  "name": "Gambac",
+  "description": "deAWTs the game and fixes colors being inverted on Apple Silicon chips",
   "authors": [
     "DanyGames2014"
   ],

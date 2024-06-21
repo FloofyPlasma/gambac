@@ -21,7 +21,7 @@ public class MinecraftAppletMixin extends Applet {
 
     /**
      * @author Proudly overwritten by DanyGames2014
-     * @reason becaise i dont give a shit
+     * @reason because i don't give a shit
      */
     @Overwrite(remap = false)
     public void init(){
@@ -61,6 +61,7 @@ public class MinecraftAppletMixin extends Applet {
         });
     }
 
+    @Unique
     private void hideThemAll(Container container) {
         try {
             if (container instanceof Frame) {
@@ -75,20 +76,16 @@ public class MinecraftAppletMixin extends Applet {
 
     /**
      * @author DanyGames2014
-     * @reason because i dont give a shit
+     * @reason because i don't give a shit
      */
     @Overwrite
-    public void method_2153() {
-        /*if (this.mcThread == null) {
-            this.mcThread = new Thread(this.mc, "Minecraft main thread");
-            this.mcThread.start();
-        }*/
+    public void method_2153() { // startMainThread
         this.field_2832.run();
     }
 
     /**
      * @author DanyGames2014
-     * @reason because i dont give a shit
+     * @reason because i don't give a shit
      */
     @Overwrite(remap = false)
     public void start() {
@@ -99,7 +96,7 @@ public class MinecraftAppletMixin extends Applet {
 
     /**
      * @author DanyGames2014
-     * @reason because i dont give a shit
+     * @reason because i don't give a shit
      */
     @Overwrite(remap = false)
     public void stop() {
@@ -110,7 +107,7 @@ public class MinecraftAppletMixin extends Applet {
 
     /**
      * @author DanyGames2014
-     * @reason because i dont give a shit
+     * @reason because i don't give a shit
      */
     @Overwrite(remap = false)
     public void destroy() {
@@ -118,18 +115,17 @@ public class MinecraftAppletMixin extends Applet {
 
     /**
      * @author DanyGames2014
-     * @reason because i dont give a shit
+     * @reason because i don't give a shit
      */
     @Overwrite
-    public void method_2154() {
-        // NOP
+    public void method_2154() { // onRemoveNotify / shutdown
     }
 
     /**
      * @author DanyGames2014
-     * @reason because i dont give a shit
+     * @reason because i don't give a shit
      */
-    public void clearApplet() {
-        // NOP
+    @Overwrite
+    public void method_2155() { // clearApplet
     }
 }

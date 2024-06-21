@@ -11,10 +11,23 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.sound.midi.Soundbank;
 import java.awt.*;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
+
+    @Inject(method = "init", at = @At(value = "TAIL"))
+    public void test(CallbackInfo ci){
+        try {
+            Display.makeCurrent();
+            Display.update();
+        } catch (LWJGLException e) {
+            System.err.println("Error while making the Display current");
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
 
 //    @Unique
 //    private long window;
