@@ -8,6 +8,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.swing.*;
 import java.applet.Applet;
@@ -105,27 +108,18 @@ public class MinecraftAppletMixin extends Applet {
         }
     }
 
-    /**
-     * @author DanyGames2014
-     * @reason because i don't give a shit
-     */
-    @Overwrite(remap = false)
-    public void destroy() {
+    @Inject(method = "destroy", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    public void destroy(CallbackInfo ci) {
+        ci.cancel();
     }
 
-    /**
-     * @author DanyGames2014
-     * @reason because i don't give a shit
-     */
-    @Overwrite
-    public void method_2154() { // onRemoveNotify / shutdown
+    @Inject(method = "method_2154", at= @At(value = "HEAD"), cancellable = true)
+    public void method_2154(CallbackInfo ci) { // onRemoveNotify / shutdown
+        ci.cancel();
     }
 
-    /**
-     * @author DanyGames2014
-     * @reason because i don't give a shit
-     */
-    @Overwrite
-    public void method_2155() { // clearApplet
+    @Inject(method = "method_2155", at = @At(value = "HEAD"), cancellable = true)
+    public void method_2155(CallbackInfo ci) { // clearApplet
+        ci.cancel();
     }
 }
