@@ -86,28 +86,6 @@ public class MinecraftAppletMixin extends Applet {
         this.field_2832.run();
     }
 
-    /**
-     * @author DanyGames2014
-     * @reason because i don't give a shit
-     */
-    @Overwrite(remap = false)
-    public void start() {
-        if (this.field_2832 != null) {
-            this.field_2832.paused = false;
-        }
-    }
-
-    /**
-     * @author DanyGames2014
-     * @reason because i don't give a shit
-     */
-    @Overwrite(remap = false)
-    public void stop() {
-        if (this.field_2832 != null) {
-            this.field_2832.paused = true;
-        }
-    }
-
     @Inject(method = "destroy", at = @At(value = "HEAD"), remap = false, cancellable = true)
     public void destroy(CallbackInfo ci) {
         ci.cancel();
