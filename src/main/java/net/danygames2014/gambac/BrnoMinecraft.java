@@ -47,6 +47,7 @@ public class BrnoMinecraft extends Minecraft {
                                      }
         );
         this.frame.setVisible(true);
+        Display.destroy();
     }
 
     @Override

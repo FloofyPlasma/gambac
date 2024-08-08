@@ -1,7 +1,5 @@
 package net.danygames2014.gambac.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.class_596;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
