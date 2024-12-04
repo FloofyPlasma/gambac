@@ -1,9 +1,9 @@
 package net.danygames2014.gambac;
 
-import net.minecraft.class_447;
-import net.minecraft.class_564;
-import net.minecraft.class_622;
+import net.minecraft.client.CrashReportPanel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ScreenScaler;
+import net.minecraft.util.crash.CrashReport;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -32,9 +32,9 @@ public class BrnoMinecraft extends Minecraft {
     }
 
     @Override
-    public void method_2102(class_447 throwable) { // displayUnexpectedThrowable(UnexpectedThrowable)
+    public void handleCrash(CrashReport throwable) { // displayUnexpectedThrowable(UnexpectedThrowable)
         this.frame.removeAll();
-        this.frame.add(new class_622(throwable), "Center");
+        this.frame.add(new CrashReportPanel(throwable), "Center");
         this.frame.validate();
         this.frame.setSize(this.displayWidth, this.displayHeight);
         this.frame.setLocationRelativeTo(null);
@@ -85,7 +85,7 @@ public class BrnoMinecraft extends Minecraft {
         }
 
         if (Display.getWidth() != this.displayWidth || Display.getHeight() != this.displayHeight) {
-            this.method_2108(Display.getWidth(), Display.getHeight());
+            this.resize(Display.getWidth(), Display.getHeight());
         }
 
         super.tick();
@@ -156,7 +156,7 @@ public class BrnoMinecraft extends Minecraft {
             }
 
             if (this.currentScreen != null) {
-                this.method_2108(this.displayWidth, this.displayHeight);
+                this.resize(this.displayWidth, this.displayHeight);
             }
 
             Display.setFullscreen(fullscreen);
@@ -173,20 +173,20 @@ public class BrnoMinecraft extends Minecraft {
         }
     }
 
-    private void method_2108(int var1, int var2) { // resize
-        if (var1 <= 0) {
-            var1 = 1;
+    private void resize(int width, int height) { // resize
+        if (width <= 0) {
+            width = 1;
         }
-        if (var2 <= 0) {
-            var2 = 1;
+        if (height <= 0) {
+            height = 1;
         }
-        this.displayWidth = var1;
-        this.displayHeight = var2;
+        this.displayWidth = width;
+        this.displayHeight = height;
         if (this.currentScreen != null) {
-            class_564 var3 = new class_564(this.options, var1, var2);
-            int var4 = var3.method_1857();
-            int var5 = var3.method_1858();
-            this.currentScreen.init(this, var4, var5);
+            ScreenScaler scaler = new ScreenScaler(this.options, width, height);
+            int scaledWidth = scaler.getScaledWidth();
+            int scaledHeight = scaler.getScaledHeight();
+            this.currentScreen.init(this, scaledWidth, scaledHeight);
         }
     }
 }
