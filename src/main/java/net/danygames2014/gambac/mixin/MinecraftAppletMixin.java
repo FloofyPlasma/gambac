@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 
-@SuppressWarnings("removal")
+@SuppressWarnings({"removal", "StringBufferReplaceableByString"})
 @Mixin(MinecraftApplet.class)
 public class MinecraftAppletMixin extends Applet {
 
@@ -28,17 +28,18 @@ public class MinecraftAppletMixin extends Applet {
      */
     @Overwrite(remap = false)
     public void init(){
-        boolean var1 = false;
+        boolean fullscreen = false;
         if (this.getParameter("fullscreen") != null) {
-            var1 = this.getParameter("fullscreen").equalsIgnoreCase("true");
+            fullscreen = this.getParameter("fullscreen").equalsIgnoreCase("true");
         }
-
-        this.minecraft = new BrnoMinecraft(this.getWidth(), this.getHeight(), var1);
+        
+        this.minecraft = new BrnoMinecraft(this.getWidth(), this.getHeight(), fullscreen);
+        
         this.minecraft.hostAddress = this.getDocumentBase().getHost();
         if (this.getDocumentBase().getPort() > 0) {
-            StringBuilder var10000 = new StringBuilder();
-            Minecraft var10002 = this.minecraft;
-            var10002.hostAddress = var10000.append(var10002.hostAddress).append(":").append(this.getDocumentBase().getPort()).toString();
+            StringBuilder hostAdressBuilder = new StringBuilder();
+            Minecraft mc = this.minecraft;
+            mc.hostAddress = hostAdressBuilder.append(mc.hostAddress).append(":").append(this.getDocumentBase().getPort()).toString();
         }
 
         if (this.getParameter("username") != null && this.getParameter("sessionid") != null) {
@@ -48,19 +49,20 @@ public class MinecraftAppletMixin extends Applet {
                 this.minecraft.session.mpPass = this.getParameter("mppass");
             }
         } else {
-            this.minecraft.session = new Session("Payer" + System.currentTimeMillis() % 10000, "");
+            this.minecraft.session = new Session("Player" + System.currentTimeMillis() % 10000, "");
         }
 
         if (this.getParameter("server") != null && this.getParameter("port") != null) {
             this.minecraft.setStartupServer(this.getParameter("server"), Integer.parseInt(this.getParameter("port")));
         }
 
+        this.startThread();
+        
         SwingUtilities.invokeLater(() -> {
             hideThemAll(this.getParent().getParent().getParent());
             hideThemAll(this.getParent().getParent());
             hideThemAll(this.getParent());
             hideThemAll(this);
-            this.startThread();
         });
     }
 
@@ -73,7 +75,7 @@ public class MinecraftAppletMixin extends Applet {
             for (Component component : container.getComponents()) {
                 component.setVisible(false);
             }
-        } catch (NullPointerException ignore) {
+        } catch (NullPointerException ignored) {
         }
     }
 
