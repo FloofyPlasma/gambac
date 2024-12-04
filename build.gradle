@@ -1,12 +1,13 @@
 plugins {
-	id 'babric-loom' version '1.4.2'
 	id 'maven-publish'
+	id 'fabric-loom' version '1.8.13'
+	id 'babric-loom-extension' version '1.8.5'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = project.archives_base_name
+base.archivesName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
@@ -14,9 +15,10 @@ loom {
 	mixin {
 		useLegacyMixinAp = true
 	}
-	gluedMinecraftJar()
-	customMinecraftManifest.set("https://babric.github.io/manifest-polyfill/${minecraft_version}.json")
-	intermediaryUrl.set("https://maven.glass-launcher.net/babric/babric/intermediary/%1\$s/intermediary-%1\$s-v2.jar")
+}
+
+babric {
+	disableM1Fixes.set(true) // Uncomment this to disable gambac (M1 colours fix.)
 }
 
 repositories {
@@ -88,7 +90,7 @@ dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.glasslauncher:biny:${project.yarn_mappings}:v2"
-	modImplementation "babric:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 //	implementation("com.github.Adventurecraft-Awakening:AC-LWJGL3-Injector:0.0.5")
 //	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
@@ -104,10 +106,10 @@ dependencies {
 	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
 	implementation "blue.endless:jankson:1.2.1"
 
-	modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
+	modImplementation ("net.modificationstation:StationAPI:${project.stapi_version}")
 
 	// Optional, but convenient mods for mod creators and users alike.
-	modImplementation("com.github.calmilamsy:ModMenu:${project.modmenu_version}") {
+	modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
 		transitive false
 	}
 //	modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
@@ -132,9 +134,7 @@ processResources {
 //}
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	// Loom also requires J17.
-	it.options.release = 17
+	options.encoding = "UTF-8"
 }
 
 java {
@@ -144,7 +144,7 @@ java {
 	withSourcesJar()
 }
 
-jar {
+tasks.withType(Jar).configureEach {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
