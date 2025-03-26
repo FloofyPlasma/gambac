@@ -13,6 +13,7 @@
   "icon": "assets/gambac/icon.png",
 
   "environment": "*",
+  "accessWidener": "gambac.accessWidener",
   "entrypoints": {
     "stationapi:event_bus": [
     ],
