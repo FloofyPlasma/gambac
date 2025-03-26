@@ -22,7 +22,8 @@ import java.nio.ByteBuffer;
 public class BrnoMinecraft extends Minecraft {
 
     private final Frame frame;
-    private int previousWidth, previousHeight;
+    private int previousWidth;
+    private int previousHeight;
 
     public BrnoMinecraft(int width, int height, boolean fullscreen) {
         super(null, null, null, width, height, fullscreen);
@@ -124,19 +125,10 @@ public class BrnoMinecraft extends Minecraft {
 
     @Override
     public void toggleFullscreen() {
-        final Object fullscreen_b;
-        boolean fullscreen;
-
         try {
-            fullscreen_b = this.getClass().getDeclaredField("fullscreen").get(this);
-            fullscreen = (boolean) fullscreen_b;
-        } catch (NoSuchFieldException | IllegalAccessException ignore) {
-            fullscreen = Display.isFullscreen();
-        }
-
-        try {
-            fullscreen = !fullscreen;
-            if (fullscreen) {
+            this.fullscreen = !this.fullscreen;
+            
+            if (this.fullscreen) {
                 this.previousWidth = Display.getWidth();
                 this.previousHeight = Display.getHeight();
 
@@ -148,9 +140,11 @@ public class BrnoMinecraft extends Minecraft {
                 this.displayHeight = this.previousHeight;
                 Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
             }
+            
             if (this.displayWidth <= 0) {
                 this.displayWidth = 1;
             }
+            
             if (this.displayHeight <= 0) {
                 this.displayHeight = 1;
             }
@@ -159,27 +153,23 @@ public class BrnoMinecraft extends Minecraft {
                 this.resize(this.displayWidth, this.displayHeight);
             }
 
-            Display.setFullscreen(fullscreen);
+            Display.setFullscreen(this.fullscreen);
             Display.update();
         } catch (Exception e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
-
-        try {
-            this.getClass().getDeclaredField("fullscreen").set(this, fullscreen);
-        } catch (NoSuchFieldException | IllegalAccessException ignore) {
-
-        }
     }
 
-    private void resize(int width, int height) { // resize
+    private void resize(int width, int height) {
         if (width <= 0) {
             width = 1;
         }
+        
         if (height <= 0) {
             height = 1;
         }
+        
         this.displayWidth = width;
         this.displayHeight = height;
         if (this.currentScreen != null) {
