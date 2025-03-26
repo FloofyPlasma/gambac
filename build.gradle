@@ -1,7 +1,7 @@
 plugins {
 	id 'maven-publish'
-	id 'fabric-loom' version '1.8.13'
-	id 'babric-loom-extension' version '1.8.5'
+	id 'fabric-loom' version '1.10.1'
+	id 'babric-loom-extension' version '1.10.1'
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -12,48 +12,51 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
-	mixin {
-		useLegacyMixinAp = true
-	}
+	accessWidenerPath = file("src/main/resources/gambac.accesswidener")
 }
 
 babric {
-	disableM1Fixes.set(true) // Uncomment this to disable gambac (M1 colours fix.)
+	disableM1Fixes.set(true) // Disable Gambáč since thats literraly this project :)
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-
-	// Used for the fabric toolchain in this project.
+	// Used for Babric Loom Extensions
 	maven {
 		name = 'Babric'
 		url = 'https://maven.glass-launcher.net/babric'
 	}
-	// Used for mappings.
+
+	// Used for many dependencies
 	maven {
 		name = 'Glass Releases'
 		url = 'https://maven.glass-launcher.net/releases'
 	}
-	// Used for StationAPI and HowManyItems.
+
+	// Used for Snapshots
 	maven {
 		name = 'Glass Snapshots'
 		url = 'https://maven.glass-launcher.net/snapshots'
 	}
+
+	// NyaRepo
+	maven {
+		name = "nyarepo"
+		url = "https://maven.fildand.cz/releases"
+	}
+
 	// Used for a StationAPI dependency.
 	maven {
 		name = 'Froge'
 		url 'https://maven.minecraftforge.net/'
 	}
+
 	// Used for projects that do not have a maven repository, but do have a GitHub repository with working build scripts.
 	maven {
 		name = 'Jitpack'
 		url = 'https://jitpack.io'
 	}
-	// Used for another StationAPI dependency
+
+	// Modrinth Maven
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -65,26 +68,9 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+
 	mavenCentral()
 }
-
-import org.gradle.internal.os.OperatingSystem
-
-//project.ext.lwjglVersion = "3.3.3"
-//switch (OperatingSystem.current()) {
-//	case OperatingSystem.LINUX:
-//		project.ext.lwjglNatives = "natives-linux"
-//		break
-//	case OperatingSystem.MAC_OS:
-//		project.ext.lwjglNatives = "natives-macos"
-//		break
-//	case OperatingSystem.WINDOWS:
-//		def osArch = System.getProperty("os.arch")
-//		project.ext.lwjglNatives = osArch.contains("64")
-//				? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
-//				: "natives-windows-x86"
-//		break
-//}
 
 dependencies {
 	// To change the versions see the gradle.properties file
@@ -92,19 +78,8 @@ dependencies {
 	mappings "net.glasslauncher:biny:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-//	implementation("com.github.Adventurecraft-Awakening:AC-LWJGL3-Injector:0.0.5")
-//	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
-//
-//	implementation "org.lwjgl:lwjgl-glfw:$lwjglVersion"
-//
-//	runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
-//	runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
-//	runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
-//	runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
-
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
 	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
-	implementation "blue.endless:jankson:1.2.1"
 
 	modImplementation ("net.modificationstation:StationAPI:${project.stapi_version}")
 
@@ -112,12 +87,6 @@ dependencies {
 	modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
 		transitive false
 	}
-//	modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
-//		transitive false
-//	}
-//	modImplementation("net.glasslauncher:HowManyItems-Fabric-Unofficial:${project.howmanyitems_version}") {
-//		transitive false
-//	}
 }
 
 processResources {
@@ -128,19 +97,11 @@ processResources {
 	}
 }
 
-//configurations.configureEach {
-	// Removes LWJGL2 dependencies
-//	exclude group: "org.lwjgl.lwjgl"
-//}
-
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = "UTF-8"
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 }
 
