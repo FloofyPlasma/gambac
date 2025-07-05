@@ -28,6 +28,17 @@ public class MinecraftAppletMixin extends Applet {
      */
     @Overwrite(remap = false)
     public void init(){
+        //System.out.println("Properties:");
+        //System.getProperties().forEach( (k, v) -> System.out.println(k + " : " + v));
+         
+        // PrismLauncher Window Size
+        if(System.getProperty("org.prismlauncher.window.dimensions") != null) {
+            String[] dimensions = System.getProperty("org.prismlauncher.window.dimensions").split("x");
+            if(dimensions.length == 2) {
+                this.setSize(Integer.parseInt(dimensions[0]), Integer.parseInt(dimensions[1]));
+            }
+        }
+        
         boolean fullscreen = false;
         if (this.getParameter("fullscreen") != null) {
             fullscreen = this.getParameter("fullscreen").equalsIgnoreCase("true");
