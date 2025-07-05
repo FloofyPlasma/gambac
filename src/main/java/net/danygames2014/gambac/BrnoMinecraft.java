@@ -55,8 +55,22 @@ public class BrnoMinecraft extends Minecraft {
     public void init() {
         Display.setResizable(true);
         super.init();
-        Display.setTitle("Minecraft Beta 1.7.3");
+        
+        // Window Title
+        try {
+            if (System.getProperty("org.prismlauncher.window.title") != null && System.getProperty("gambacUsePrismTitle") != null) {
+                // PrismLauncher Window Title
+                Display.setTitle(System.getProperty("org.prismlauncher.window.title"));
+            } else {
+                // Fallback
+                Display.setTitle("Minecraft Beta 1.7.3");
+            }
+        } catch (Exception ignored) {
+            // If something happens, fallback to the default title
+            Display.setTitle("Minecraft Beta 1.7.3");
+        }
 
+        // Window Icon
         ByteBuffer[] icons = new ByteBuffer[2];
         try {
             icons[0] = loadIcon("/assets/gambac/icons/16.png");
@@ -64,10 +78,11 @@ public class BrnoMinecraft extends Minecraft {
         } catch (Exception ignored) {
         }
 
-        if(icons[0] != null && icons[1] != null){
+        if (icons[0] != null && icons[1] != null) {
             Display.setIcon(icons);
         }
 
+        // Make the display current
         try {
             Display.makeCurrent();
             Display.update();
@@ -127,7 +142,7 @@ public class BrnoMinecraft extends Minecraft {
     public void toggleFullscreen() {
         try {
             this.fullscreen = !this.fullscreen;
-            
+
             if (this.fullscreen) {
                 this.previousWidth = Display.getWidth();
                 this.previousHeight = Display.getHeight();
@@ -140,11 +155,11 @@ public class BrnoMinecraft extends Minecraft {
                 this.displayHeight = this.previousHeight;
                 Display.setDisplayMode(new DisplayMode(this.displayWidth, this.displayHeight));
             }
-            
+
             if (this.displayWidth <= 0) {
                 this.displayWidth = 1;
             }
-            
+
             if (this.displayHeight <= 0) {
                 this.displayHeight = 1;
             }
@@ -165,11 +180,11 @@ public class BrnoMinecraft extends Minecraft {
         if (width <= 0) {
             width = 1;
         }
-        
+
         if (height <= 0) {
             height = 1;
         }
-        
+
         this.displayWidth = width;
         this.displayHeight = height;
         if (this.currentScreen != null) {
