@@ -96,7 +96,7 @@ public class BrnoMinecraft extends Minecraft {
 
     @Override
     public void tick() {
-        if (GL11.glGetString(GL11.GL_RENDERER).contains("Apple M")) {
+        if (GL11.glGetString(GL11.GL_RENDERER).contains("Apple M") && !System.getProperty("os.name").toLowerCase().contains("linux")) {
             GL11.glEnable(GL30.GL_FRAMEBUFFER_SRGB);
         }
 
