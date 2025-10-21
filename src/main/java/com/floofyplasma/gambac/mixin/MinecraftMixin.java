@@ -1,4 +1,4 @@
-package net.danygames2014.gambac.mixin;
+package com.floofyplasma.gambac.mixin;
 
 import net.minecraft.client.Minecraft;
 import org.lwjgl.LWJGLException;

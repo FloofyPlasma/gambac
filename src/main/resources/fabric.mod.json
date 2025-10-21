@@ -6,7 +6,8 @@
   "name": "Gambac",
   "description": "deAWTs the game and fixes colors being inverted on Apple Silicon chips",
   "authors": [
-    "DanyGames2014"
+    "DanyGames2014",
+    "FloofyPlasma"
   ],
 
   "license": "MIT",
@@ -27,6 +28,6 @@
   ],
 
   "depends": {
-    "minecraft": "1.0.0-beta.7.3"
+    "minecraft": "1.0.0-alpha.1.2.1"
   }
 }

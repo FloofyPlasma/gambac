@@ -1,9 +1,9 @@
-package net.danygames2014.gambac.mixin;
+package com.floofyplasma.gambac.mixin;
 
-import net.danygames2014.gambac.BrnoMinecraft;
+import com.floofyplasma.gambac.BrnoMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftApplet;
-import net.minecraft.client.util.Session;
+import net.minecraft.client.Session;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
+import java.util.Objects;
 
 @SuppressWarnings({"removal", "StringBufferReplaceableByString"})
 @Mixin(MinecraftApplet.class)
@@ -53,25 +54,27 @@ public class MinecraftAppletMixin extends Applet {
 
         this.minecraft = new BrnoMinecraft(this.getWidth(), this.getHeight(), fullscreen);
 
-        this.minecraft.hostAddress = this.getDocumentBase().getHost();
+        if (!(Objects.equals(this.getDocumentBase().getHost(), "www.minecraft.net"))) {
+            this.minecraft.serverAddress = this.getDocumentBase().getHost();
+        }
         if (this.getDocumentBase().getPort() > 0) {
             StringBuilder hostAdressBuilder = new StringBuilder();
             Minecraft mc = this.minecraft;
-            mc.hostAddress = hostAdressBuilder.append(mc.hostAddress).append(":").append(this.getDocumentBase().getPort()).toString();
+            mc.serverAddress = hostAdressBuilder.append(mc.serverAddress).append(":").append(this.getDocumentBase().getPort()).toString();
         }
 
         if (this.getParameter("username") != null && this.getParameter("sessionid") != null) {
             this.minecraft.session = new Session(this.getParameter("username"), this.getParameter("sessionid"));
             System.out.println("Setting user: " + this.minecraft.session.username);
             if (this.getParameter("mppass") != null) {
-                this.minecraft.session.mpPass = this.getParameter("mppass");
+                this.minecraft.session.password = this.getParameter("mppass");
             }
         } else {
             this.minecraft.session = new Session("Player" + System.currentTimeMillis() % 10000, "");
         }
 
         if (this.getParameter("server") != null && this.getParameter("port") != null) {
-            this.minecraft.setStartupServer(this.getParameter("server"), Integer.parseInt(this.getParameter("port")));
+            this.minecraft.setServerAddressAndPort(this.getParameter("server"), Integer.parseInt(this.getParameter("port")));
         }
 
         this.startThread();
@@ -116,7 +119,7 @@ public class MinecraftAppletMixin extends Applet {
         ci.cancel();
     }
 
-    @Inject(method = "clearMemory", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "c", at = @At(value = "HEAD"), cancellable = true, remap = false)
     public void clearMemory(CallbackInfo ci) {
         ci.cancel();
     }

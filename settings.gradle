@@ -8,6 +8,10 @@ pluginManagement {
             name = 'Babric'
             url = 'https://maven.glass-launcher.net/babric'
         }
+        maven {
+            name = 'Aabric'
+            url = 'https://floofyplasma.github.io/aabric-libraries'
+        }
         mavenCentral()
         gradlePluginPortal()
     }

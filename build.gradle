@@ -1,7 +1,7 @@
 plugins {
 	id 'maven-publish'
-	id 'fabric-loom' version '1.10.1'
-	id 'babric-loom-extension' version '1.10.1'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'babric-loom-extension' version '1.6-SNAPSHOT'
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -12,7 +12,10 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
-	accessWidenerPath = file("src/main/resources/gambac.accesswidener")
+	clientOnlyMinecraftJar()
+	accessWidenerPath = file("src/main/resources/gambac.accessWidener")
+	customMinecraftManifest.set("https://floofyplasma.github.io/aabric-libraries/manifests/${minecraft_version}.json")
+	intermediaryUrl.set("https://floofyplasma.github.io/aabric-libraries/aabric/intermediary/%1\$s/intermediary-%1\$s-v2.jar")
 }
 
 babric {
@@ -56,6 +59,12 @@ repositories {
 		url = 'https://jitpack.io'
 	}
 
+	// Aabric :3
+	maven {
+		name = 'Aabric'
+		url = 'https://floofyplasma.github.io/aabric-libraries'
+	}
+
 	// Modrinth Maven
 	exclusiveContent {
 		forRepository {
@@ -75,18 +84,20 @@ repositories {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.glasslauncher:biny:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	mappings "aabric:aarn:${project.yarn_mappings}:v2"
+	modImplementation "babric:fabric-loader:${project.loader_version}"
 
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
 	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
 
+	/* TODO: ...
 	modImplementation ("net.modificationstation:StationAPI:${project.stapi_version}")
 
 	// Optional, but convenient mods for mod creators and users alike.
 	modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
 		transitive false
 	}
+	*/
 }
 
 processResources {
